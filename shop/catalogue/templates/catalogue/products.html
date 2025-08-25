@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Fresh Products</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 p-6">
+  <div class="max-w-7xl mx-auto bg-white p-6 rounded">
+    <h1 class="text-4xl font-bold mb-6">Fresh products</h1>
+    <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {% for product in products %}
+      <li class="rounded p-4 flex flex-col items-center"> 
+        {% if product.image %}
+          <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-48 h-48 object-contain mb-4 rounded"/> 
+        {% else %}
+          <div class="w-48 h-48 bg-gray-200 flex items-center justify-center mb-4 rounded">
+            <span class="text-gray-500">No Image</span>
+          </div>
+        {% endif %}
+        <a href="{% url 'product_details' id=product.id %}" class="text-xl font-semibold text-blue-600 hover:underline">{{ product.name }}</a>
+        <span class="font-bold mt-2">Price: ${{ product.price }}</span>
+        <p class="mt-1 text-gray-700">{{ product.description }}</p>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</body>
+</html>

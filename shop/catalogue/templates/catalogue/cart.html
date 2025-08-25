@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Shopping Cart</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+</head>
+<body class="min-h-screen flex flex-col py-10 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-100 via-blue-50 to-blue-100">
+  <div class="max-w-4xl w-full mx-auto bg-white rounded-xl shadow-md p-8">
+    <a href="{% url 'product_list' %}" class="inline-flex items-center text-blue-600 hover:text-blue-800 mb-8 transition-colors duration-200">
+      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+      Back to Home
+    </a>
+
+    <h1 class="text-4xl font-extrabold text-gray-900 mb-8 border-b pb-3">Your Cart</h1>
+
+    {% if cart_items %}
+      <ul class="divide-y divide-gray-200">
+        {% for item in cart_items %}
+          <li class="flex flex-col sm:flex-row justify-between items-start sm:items-center py-6">
+            <div class="flex flex-col">
+              <h2 class="text-2xl font-semibold text-gray-900 mb-1">{{ item.product.name }}</h2>
+              <p class="text-gray-600">Quantity: <span class="font-medium">{{ item.quantity }}</span></p>
+              <p class="text-gray-600">Price: <span class="font-medium">${{ item.product.price }}</span></p>
+              <p class="text-gray-800 font-semibold mt-1">Total: ${{ item.item_total }}</p>
+            </div>
+            <form method="post" action="{% url 'remove_from_cart' item.product.id %}" class="mt-4 sm:mt-0">
+              {% csrf_token %}
+              <button 
+                type="submit" 
+                class="inline-flex items-center bg-red-600 hover:bg-red-700 text-white text-sm font-semibold px-4 py-2 rounded transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-red-500"
+              >
+                Remove
+              </button>
+            </form>
+          </li>
+        {% endfor %}
+      </ul>
+
+      <div class="mt-10 flex justify-end items-center border-t pt-6">
+        <span class="text-2xl font-extrabold text-gray-900">Total Price: ${{ total_price }}</span>
+      </div>
+    {% else %}
+      <p class="text-center text-gray-500 text-lg py-16">Your cart is empty.</p>
+    {% endif %}
+  </div>
+</body>
+</html>
